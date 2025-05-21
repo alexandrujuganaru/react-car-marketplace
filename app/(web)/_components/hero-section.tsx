@@ -1,12 +1,13 @@
 import { Card, CardContent } from "@/components/ui/card";
 import React from "react";
 import Image from "next/image";
+import HeroFilter from "./_common/hero-filter";
 
 const HeroSection = () => {
   return (
     <div
       className="w-full
-  min-h-[550px] mb-4
+  min-h-[450px] mb-4
   "
       style={{
         background: `linear-gradient(160.29deg, #26004d .67%,
@@ -33,6 +34,7 @@ const HeroSection = () => {
                   </span>
                   <span className="text-primary">Your Way</span>
                 </h2>
+                <HeroFilter />
               </div>
             </CardContent>
           </Card>
