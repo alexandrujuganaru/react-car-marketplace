@@ -19,7 +19,7 @@ const Logo = () => {
           <Dot />
         </span>
       </div>
-      <span className="font-semibold text-base">DriveHub</span>
+      <span className="font-semibold text-base text-white">DriveHub</span>
     </Link>
   );
 };
