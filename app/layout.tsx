@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import RegisterDialog from "@/components/auth/RegisterDialog";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
+import LoginDialog from "@/components/auth/LoginDialog";
+import QueryProvider from "@/context/query-provider";
 
 export const metadata: Metadata = {
   title: "DriveHub",
@@ -16,8 +19,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`bg-[#EBF2F7] antialiased`}>
-        {children}
-        <Toaster />
+        <QueryProvider>
+          <NuqsAdapter>
+            <RegisterDialog />
+            <LoginDialog />
+            {children}
+          </NuqsAdapter>
+          <Toaster />
+        </QueryProvider>
       </body>
     </html>
   );
