@@ -132,7 +132,7 @@ const RegisterDialog = () => {
                   <FormLabel>Shop Name</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="DriveHub co."
+                      placeholder="example co."
                       className="!h-10"
                       {...field}
                     />

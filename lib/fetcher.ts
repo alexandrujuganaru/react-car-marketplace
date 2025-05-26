@@ -1,7 +1,7 @@
-import { LoginType, RegisterType } from "@/@types/api.type";
 import axios from "axios";
+import { LoginType, RegisterType } from "@/@types/api.type";
 
-export const registerMutationfn = async (data: RegisterType) =>
+export const registerMutationFn = async (data: RegisterType) =>
   await axios.post("/api/register", data);
 
 export const loginMutationFn = async (data: LoginType) =>

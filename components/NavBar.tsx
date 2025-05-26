@@ -92,8 +92,11 @@ const NavBar = () => {
             </button>
             <Separator orientation="vertical" className="h-3 text-white" />
             {/* Registration button */}
-            <button className="text-sm font-extralight text-white">
-              Registration
+            <button
+              onClick={onRegisterOpen}
+              className="text-sm font-extralight text-white"
+            >
+              Register
             </button>
           </div>
           <Button
