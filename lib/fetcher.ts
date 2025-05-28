@@ -6,3 +6,10 @@ export const registerMutationFn = async (data: RegisterType) =>
 
 export const loginMutationFn = async (data: LoginType) =>
   await axios.post("/api/login", data);
+
+export const logoutMutationFn = async () => await axios.post("/api/logout");
+
+export const getCurrentUserQueryFn = async () => {
+  const response = await axios.get("/api/current-user");
+  return response.data;
+};
