@@ -16,6 +16,9 @@ import {
 import { addListingFields } from "@/constants/listing-fields";
 import FormGenerator from "@/components/FormGenerator";
 import { Button } from "@/components/ui/button";
+import FileUploader from "@/components/FileUploader";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { X } from "lucide-react";
 
 const AddListing = () => {
   const listingClientSchema = listingSchema.extend({
@@ -55,10 +58,25 @@ const AddListing = () => {
     },
   });
 
+  const imageUrls = useWatch({
+    control: form.control,
+    name: "imageUrls",
+  });
+
   const brand = useWatch({
     control: form.control,
     name: "brand",
   });
+
+  const handleImageUrls = (imageUrls: string[]) => {
+    form.setValue("imageUrls", [...form.getValues().imageUrls, ...imageUrls]);
+  };
+
+  const handleRemoveImage = (index: number) => {
+    const updatedImageUrls = [...form.getValues().imageUrls];
+    updatedImageUrls.splice(index, 1);
+    form.setValue("imageUrls", updatedImageUrls);
+  };
 
   function onSubmit(values: FormDataType) {
     console.log(values);
@@ -86,7 +104,49 @@ const AddListing = () => {
                     className="w-full"
                   >
                     {/* {images upload} */}
-                    <div></div>
+                    <div className="space-y-2 pt-3">
+                      <h2 className="text-sm font-medium text-[#33283e]">
+                        Add Photo
+                      </h2>
+                      <div className="text-sm text-[#826ca0]">
+                        <div>Add at least 3 photos for this listing</div>
+                        First picture - is the title picture.
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-start mt-2">
+                      <FileUploader onFileUrlsReceived={handleImageUrls}>
+                        <ScrollArea className="w-96 whitespace-nowrap ml-3">
+                          <div className="w-full">
+                            {imageUrls?.map(
+                              (imageUrl: string, index: number) => (
+                                <div
+                                  key={`id${index}`}
+                                  className="relative overflow-hidden w-20 h-20
+                              rounded-[8px] bg-[#eee5f6]
+                              "
+                                >
+                                  <img
+                                    src={imageUrl}
+                                    alt=""
+                                    width={80}
+                                    height={80}
+                                    className="w-full h-full rounded-[8px] object-cover"
+                                  />
+                                  <button
+                                    onClick={() => handleRemoveImage(index)}
+                                    className="absolute top-0 right-0 p-1
+                                bg-black rounded-full"
+                                  >
+                                    <X className="w-4 h-4 !text-white" />
+                                  </button>
+                                </div>
+                              )
+                            )}
+                          </div>
+                          <ScrollBar orientation="horizontal" />
+                        </ScrollArea>
+                      </FileUploader>
+                    </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 mt-4 gap-5">
                       {addListingFields.map((field, index) => (
