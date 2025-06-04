@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { BRAND, z } from "zod";
+import { z } from "zod";
 import { listingSchema } from "@/validation/listing.validation";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { useForm, useWatch } from "react-hook-form";
@@ -18,9 +18,27 @@ import FormGenerator from "@/components/FormGenerator";
 import { Button } from "@/components/ui/button";
 import FileUploader from "@/components/FileUploader";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { X } from "lucide-react";
+import { Loader, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import useCurrentUser from "@/hooks/api/use-current-user";
+import { useMutation } from "@tanstack/react-query";
+import { addListingMutationFn } from "@/lib/fetcher";
+import {
+  CAR_BRAND_OPTIONS,
+  CAR_MODEL_OPTIONS,
+  CAR_YEAR_OPTIONS,
+} from "@/constants/car-options";
+import { toast } from "@/hooks/use-toast";
 
 const AddListing = () => {
+  const router = useRouter();
+  const { data } = useCurrentUser();
+  const shop = data?.shop;
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: addListingMutationFn,
+  });
+
   const listingClientSchema = listingSchema.extend({
     contactPhone: z
       .string({
@@ -78,8 +96,51 @@ const AddListing = () => {
     form.setValue("imageUrls", updatedImageUrls);
   };
 
+  const getLabel = (
+    value: string,
+    options: { value: string; label: string }[]
+  ) => {
+    const option = options.find((opt) => opt.value === value);
+    return option ? option.label : value;
+  };
+
   function onSubmit(values: FormDataType) {
-    console.log(values);
+    const { brand, model, condition, yearOfManufacture, exteriorColor } =
+      values;
+    const displayTitle = [
+      condition === "BRAND_NEW" ? "New" : null,
+      getLabel(brand, CAR_BRAND_OPTIONS),
+      getLabel(model, CAR_MODEL_OPTIONS),
+      getLabel(yearOfManufacture, CAR_YEAR_OPTIONS),
+      exteriorColor !== "other"
+        ? getLabel(exteriorColor, CAR_YEAR_OPTIONS)
+        : null,
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    const payload = {
+      ...values,
+      displayTitle,
+      shopId: shop?.$id,
+    };
+    mutate(payload, {
+      onSuccess: () => {
+        toast({
+          title: "Listing added successfully",
+          description: "Your listing is now live on the platform",
+          variant: "success",
+        });
+        router.push("/my-shop");
+      },
+      onError: (error) => {
+        toast({
+          title: "Something went wrong",
+          description: error.message,
+          variant: "destructive",
+        });
+      },
+    });
   }
   return (
     <main className="container mx-auto px-4 pt-3 pb-8">
@@ -87,14 +148,16 @@ const AddListing = () => {
         <Card className="!bg-transparent shadow-none border-none">
           <CardHeader
             className="flex items-center justify-center
-          bg-white rounded -[8px] p-4 mb-4"
+                  bg-white rounded-[8px] p-4 mb-4
+                      "
           >
             <CardTitle className="font-semibold text-xl">Add Listing</CardTitle>
           </CardHeader>
 
           <CardContent
             className="bg-white rounded-[8px]
-          p-4 px-6 pb-8"
+            p-4 px-6 pb-8
+            "
           >
             <div className="w-full mx-auto">
               <div className="flex items-center">
@@ -113,39 +176,46 @@ const AddListing = () => {
                         First picture - is the title picture.
                       </div>
                     </div>
-                    <div className="flex items-center justify-start mt-2">
-                      <FileUploader onFileUrlsReceived={handleImageUrls}>
-                        <ScrollArea className="w-96 whitespace-nowrap ml-3">
-                          <div className="w-full">
-                            {imageUrls?.map(
-                              (imageUrl: string, index: number) => (
-                                <div
-                                  key={`id${index}`}
-                                  className="relative overflow-hidden w-20 h-20
+
+                    <div>
+                      <div className="flex items-center justify-start mt-2">
+                        <FileUploader onFileUrlsReceived={handleImageUrls}>
+                          <ScrollArea className="w-96 whitespace-nowrap ml-3">
+                            <div className="w-full flex max-w space-x-4 items-center h-20">
+                              {imageUrls?.map(
+                                (imageUrl: string, index: number) => (
+                                  <div
+                                    key={`id-${index}`}
+                                    className="relative overflow-hidden w-20 h-20
                               rounded-[8px] bg-[#eee5f6]
-                              "
-                                >
-                                  <img
-                                    src={imageUrl}
-                                    alt=""
-                                    width={80}
-                                    height={80}
-                                    className="w-full h-full rounded-[8px] object-cover"
-                                  />
-                                  <button
-                                    onClick={() => handleRemoveImage(index)}
-                                    className="absolute top-0 right-0 p-1
-                                bg-black rounded-full"
+                                "
                                   >
-                                    <X className="w-4 h-4 !text-white" />
-                                  </button>
-                                </div>
-                              )
-                            )}
-                          </div>
-                          <ScrollBar orientation="horizontal" />
-                        </ScrollArea>
-                      </FileUploader>
+                                    <img
+                                      src={imageUrl}
+                                      alt=""
+                                      width={80}
+                                      height={80}
+                                      className="w-full h-full rounded-[8px] object-cover"
+                                    />
+                                    <button
+                                      onClick={() => handleRemoveImage(index)}
+                                      className="absolute top-0 right-0 p-1
+                                  bg-black rounded-full
+                                  "
+                                    >
+                                      <X className="w-4 h-4 !text-white" />
+                                    </button>
+                                  </div>
+                                )
+                              )}
+                            </div>
+                            <ScrollBar orientation="horizontal" />
+                          </ScrollArea>
+                        </FileUploader>
+                      </div>
+                      <FormMessage>
+                        {form.formState.errors.imageUrls?.message}
+                      </FormMessage>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 mt-4 gap-5">
@@ -154,7 +224,7 @@ const AddListing = () => {
                           key={index}
                           control={form.control}
                           name={field.name as FormFieldName}
-                          disabled={field.disabled}
+                          disabled={field.disabled || isPending}
                           render={({ field: formField }) => {
                             const filteredModels =
                               field.name === "model" && brand
@@ -162,13 +232,13 @@ const AddListing = () => {
                                     (model) => model.key === brand
                                   )
                                 : [];
+
                             const valueMultiSelect =
                               field.fieldType === "multiselect"
                                 ? Array.isArray(formField.value)
                                   ? formField.value
                                   : []
                                 : [];
-
                             return (
                               <FormItem
                                 className={`${
@@ -191,21 +261,24 @@ const AddListing = () => {
                                     onChange={formField.onChange}
                                   />
                                 </FormControl>
+                                <FormMessage />
                               </FormItem>
                             );
                           }}
                         />
                       ))}
                     </div>
+
                     <Button
                       type="submit"
                       size="lg"
                       className="mt-6 py-6 mb-4 w-full
-                     max-w-xs flex place-items-center
-                     justify-self-center
-                     "
-                      disabled={false}
+                      max-w-xs flex place-items-center
+                       justify-self-center
+                      "
+                      disabled={isPending}
                     >
+                      {isPending && <Loader className="w-4 h-4 animate-spin" />}
                       Post Listing
                     </Button>
                   </form>
