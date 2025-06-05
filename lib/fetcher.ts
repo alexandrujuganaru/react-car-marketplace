@@ -16,3 +16,9 @@ export const getCurrentUserQueryFn = async () => {
 
 export const addListingMutationFn = async (data: ListingType) =>
   await axios.post("/api/add-listing", data);
+
+// Get MyShop and Listing
+export const getMyShopQueryFn = async () => {
+  const response = await axios.get("/api/shop/my-shop");
+  return response.data;
+};
