@@ -28,9 +28,9 @@ const HeroSection = () => {
                         font-extrabold leading-10 md:leading-[50px]"
                 >
                   <span className="text-black">
-                    Find the Car You
+                    Your journey,
                     <br />
-                    Want{" "}
+                    Your car,{" "}
                   </span>
                   <span className="text-primary">Your Way</span>
                 </h2>

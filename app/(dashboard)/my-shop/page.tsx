@@ -34,7 +34,7 @@ const MyShop = () => {
             />
           </div>
           <div className="pt-1">
-            <AllListing />
+            <AllListing listings={listings} isPending={false} />
           </div>
         </div>
       </div>
