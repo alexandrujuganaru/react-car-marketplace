@@ -127,7 +127,7 @@ const CarCard: React.FC<CarCardProps> = ({ listing, layout = "grid" }) => {
                               "
               >
                 <GaugeIcon className="size-3  mb-px" />
-                {mileage} mpg
+                {mileage} KM
               </Badge>
 
               <Badge
