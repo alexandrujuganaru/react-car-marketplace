@@ -17,9 +17,6 @@ export async function createAdminClient() {
     get databases() {
       return new Databases(client);
     },
-    get storages() {
-      return new Storage(client);
-    },
   };
 }
 

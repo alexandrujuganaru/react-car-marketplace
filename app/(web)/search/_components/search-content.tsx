@@ -6,6 +6,7 @@ import Filters from "./filters";
 import AllListings from "./all-listing";
 import { useQuery } from "@tanstack/react-query";
 import useFilter from "@/hooks/use-filter";
+import { getAllCarListingQueryFn } from "@/lib/fetcher";
 
 const SearchContent = () => {
   const { filters } = useFilter();
@@ -24,12 +25,25 @@ const SearchContent = () => {
       filters.keyword,
       filters.condition,
     ],
+    queryFn: () =>
+      getAllCarListingQueryFn({
+        brand: filters.brand,
+        model: filters.model,
+        color: filters.color,
+        price: filters.price,
+        condition: filters.condition,
+        year_max: filters.yearMax,
+        year_min: filters.yearMin,
+        keyword: filters.keyword,
+        fuelType: filters.fuelType,
+      }),
+    staleTime: 0,
   });
 
   const listings = data?.listings || [];
 
   const breadcrumbItems = [
-    { label: "Auto Hunt", href: "/" },
+    { label: "DriveHub", href: "/" },
     { label: `${listings?.length || 0} results cars found` },
   ];
 

@@ -47,7 +47,7 @@ const AllListings = ({
               onClick={() => {
                 setLayout("grid");
               }}
-              className={`${layout === "grid" ? "text-primary" : ""}`}
+              className={`${layout === "grid" ? "text-bramary" : ""}`}
             />
             <List
               role="button"
