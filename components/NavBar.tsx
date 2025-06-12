@@ -120,18 +120,18 @@ const NavBar = () => {
           {!hideNavPath.includes(pathname) && (
             <>
               <li>
-                <Link href="/" className="text-sm font-medium">
+                <Link href="/" className="text-md font-medium">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/" className="text-sm font-medium">
-                  Services & Repair
+                <Link href="/" className="text-md font-medium">
+                  Used cars
                 </Link>
               </li>
               <li>
-                <Link href="/" className="text-sm font-medium">
-                  Pricing
+                <Link href="/" className="text-md font-medium">
+                  New cars
                 </Link>
               </li>
             </>
@@ -204,7 +204,7 @@ const NavBar = () => {
           <Button
             size="default"
             className="!bg-[#fea03c]
-        !px-5 !h-10
+        !px-8 !h-10
         "
             onClick={handleSell}
           >
