@@ -120,19 +120,13 @@ const NavBar = () => {
           {!hideNavPath.includes(pathname) && (
             <>
               <li>
-                <Link href="/" className="text-md font-medium">
-                  Home
-                </Link>
+                <Link href="/" className="text-md font-medium"></Link>
               </li>
               <li>
-                <Link href="/" className="text-md font-medium">
-                  Used cars
-                </Link>
+                <Link href="/" className="text-md font-medium"></Link>
               </li>
               <li>
-                <Link href="/" className="text-md font-medium">
-                  New cars
-                </Link>
+                <Link href="/" className="text-md font-medium"></Link>
               </li>
             </>
           )}

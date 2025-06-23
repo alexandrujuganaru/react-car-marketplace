@@ -262,11 +262,15 @@ export const CAR_COLOR_OPTIONS = [
   },
   {
     value: "gray",
-    label: "gray",
+    label: "Gray",
   },
   {
     value: "beige",
-    label: "beige",
+    label: "Beige",
+  },
+  {
+    value: "cognac",
+    label: "Cognac",
   },
   {
     value: "black",
